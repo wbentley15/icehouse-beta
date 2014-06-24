@@ -1,0 +1,19 @@
+---
+- name: Install MySQL
+  yum: name={{item}} state=present
+  with_items:
+   - mysql
+   - mysql-server
+   - MySQL-python
+
+- name: Set MySQL variables
+  mysql_variables: variable=bind-address value={{ hostvars[host]['ansible_eth1']['ipv4']['address'] }}
+  mysql_variables: variable=default-storage-engine value=innodb
+  mysql_variables: variable=innodb_file_per_table value=1
+  mysql_variables: variable=collation-server value=utf8_general_ci
+  mysql_variables: variable=init-connect value='SET NAMES utf8'
+  mysql_variables: variable=character-set-server value=utf8
+
+- name: Enable MySQL to be started at boot
+  service: name=mysqld enabled=yes state=started
+  notify: restart mysql

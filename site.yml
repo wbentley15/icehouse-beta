@@ -1,0 +1,8 @@
+---
+# This playbook deploys a simple standalone MySQL server. 
+
+- hosts: ice_openstack 
+  user: root
+
+  roles:
+    - mysql-standalone
