@@ -3,6 +3,17 @@
 
 - hosts: ice_openstack 
   user: root
-
+  remote_user: root
+  sudo: yes
   roles:
+    - ntp-standalone
     - mysql-standalone
+    - openstack-packages
+    - rabbitmq-standalone
+
+- hosts: ice_openstack_compute
+  user: root
+  remote_user: root
+  sudo: yes
+  roles:
+    - mysql-python

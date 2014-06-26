@@ -1,0 +1,5 @@
+---
+- name: Install NTP
+  yum: name={{item}} state=present
+  with_items:
+   - MySQL-python

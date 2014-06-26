@@ -1,0 +1,18 @@
+---
+- name: Install Erlang
+  yum: name={{item}} state=present
+  with_items:
+   - erlang
+
+- name: Import Rabbit signing key
+  command: /bin/rpm --import http://www.rabbitmq.com/rabbitmq-signing-key-public.asc
+
+- name: Copy the RabbitMQ RPM
+  copy: src=rabbitmq-server-3.3.4-1.noarch.rpm dest=/usr/share mode=0755
+  
+- name: Install RabbitMQ
+  yum: name=/usr/share/rabbitmq-server-3.3.4-1.noarch.rpm state=present
+
+- name: Enable RabbitMQ to be started at boot
+  service: name=rabbitmq-server enabled=yes state=started
+  notify: restart rabbitmq

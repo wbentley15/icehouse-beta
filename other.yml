@@ -1,0 +1,8 @@
+- hosts: ice_openstack_other
+  user: root
+  remote_user: root
+  sudo: yes
+  roles:
+    - ntp-standalone
+    - mysql-standalone
+    - galera-addon
