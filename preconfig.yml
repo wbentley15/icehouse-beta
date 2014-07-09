@@ -1,0 +1,10 @@
+---
+
+- hosts: ice_openstack_infra 
+  user: root
+  remote_user: root
+  sudo: yes
+  roles:
+    - mysql-python
+    - mysql-config
+    - icehouse-packages

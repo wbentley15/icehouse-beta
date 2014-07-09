@@ -16,3 +16,9 @@
 - name: Enable RabbitMQ to be started at boot
   service: name=rabbitmq-server enabled=yes state=started
   notify: restart rabbitmq
+
+- name: Set RabbitMQ default password
+  command: rabbitmqctl change_password guest guest
+  
+- name: Copy the RabbitMQ config
+  copy: src=rabbitmq.config dest=/etc/rabbitmq/rabbitmq.config

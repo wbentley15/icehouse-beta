@@ -1,0 +1,16 @@
+---
+- name: Install HAproxy
+  yum: name={{item}} state=present
+  with_items:
+   - haproxy
+
+- name: Stop iptables and ip6tables
+  service: name=iptables enabled=no state=stopped
+  service: name=iptables enabled=no state=stopped
+  
+- name: Copy haproxy config
+  copy: src=haproxy.cfg dest=/etc/haproxy/haproxy.cfg
+
+- name: Restarting haproxy service
+  service: name=haproxy enabled=yes state=restarted
+

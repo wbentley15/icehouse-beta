@@ -1,0 +1,8 @@
+---
+
+- hosts: ice_openstack_primary
+  user: root
+  remote_user: root
+  sudo: yes
+  roles:
+    - openstack-dbs

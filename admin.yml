@@ -1,4 +1,6 @@
-- hosts: ice_openstack_other
+---
+
+- hosts: ice_openstack_admin
   user: root
   remote_user: root
   sudo: yes
@@ -6,3 +8,4 @@
     - ntp-standalone
     - mysql-standalone
     - galera-addon
+#    - haproxy-standalone

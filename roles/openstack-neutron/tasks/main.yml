@@ -1,0 +1,46 @@
+---
+- name: Copy the kernel networking update file
+  copy: src=sysctl.conf dest=/etc/sysctl.conf
+
+- name: Implement kernel networking changes
+  shell: sysctl -p
+  
+- name: Create Networking service user
+  command: keystone user-create --name=neutron --pass=passwd --email=neutron@neutron.com
+
+- name: Set Networking service user tenant and role 
+  command: keystone user-role-add --user=neutron --tenant=service --role=admin
+ 
+- name: Create service for Networking Service
+  command: keystone service-create --name=neutron --type=network --description="OpenStack Networking"
+
+- name: Copying endpoint_create.sh file
+  template: src=endpoint_create.sh dest=/usr/share/endpoint_create.sh mode=0755
+
+- name: Create service endpoint for Networking Service
+  shell: chdir=/usr/share endpoint_create.sh
+
+- name: Set Networking Service tenant id
+  command: openstack-config --set /etc/neutron/neutron.conf DEFAULT nova_admin_tenant_id $(keystone tenant-list | awk '/ service / { print $2 }')
+
+- name: Copy the ML2 conf
+  template: src=ml2_conf.ini dest=/etc/neutron/plugins/ml2/ml2_conf.ini
+  
+- name: Copy the L3 agent conf
+  copy: src=l3_agent.ini dest=/etc/neutron/l3_agent.ini
+
+- name: Copy the DHCP agent conf
+  copy: src=dhcp_agent.ini dest=/etc/neutron/dhcp_agent.ini
+
+- name: Copy the Metadata agent conf
+  template: src=metadata_agent.ini dest=/etc/neutron/metadata_agent.ini
+
+- name: Create symbolic link from ML2 to Neutron plugins
+  shell: ln -s plugins/ml2/ml2_conf.ini /etc/neutron/plugin.ini
+  
+- name: Enable Networking Service to be started at boot
+  service: name=neutron-server enabled=yes state=started
+  service: name=neutron-linuxbridge-agent enabled=yes state=started
+  service: name=neutron-l3-agent enabled=yes state=started
+  service: name=neutron-dhcp-agent enabled=yes state=started
+  service: name=neutron-metadata-agent enabled=yes state=started

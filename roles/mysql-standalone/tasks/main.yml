@@ -14,8 +14,7 @@
   command: chdir=/usr/bin mysql_install_db
 
 - name: Enable MySQL to be started at boot
-  service: name=mysqld enabled=yes state=started
-  notify: restart mysql
+  service: name=mysqld enabled=yes state=restarted
   
 - name: Copy the prep script
   copy: src=mysql_secure.sql dest=/usr/share mode=0755

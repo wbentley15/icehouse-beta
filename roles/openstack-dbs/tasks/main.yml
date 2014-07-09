@@ -1,0 +1,46 @@
+---
+
+- name: Copying Keystone config
+  template: src=keystone.conf dest=/etc/keystone/keystone.conf
+
+- name: Copy the Keystone db prep script
+  copy: src=keystone_create_db.sql dest=/usr/share/keystone_create_db.sql mode=0755
+
+- name: Create Keystone db
+  shell: chdir=/usr/bin mysql -u root --password=passwd < /usr/share/keystone_create_db.sql
+  
+- name: Create Keystone db tables
+  shell: sudo /bin/sh -c "keystone-manage db_sync" keystone
+
+- name: Copying Glance config
+  template: src=glance-api.conf dest=/etc/glance/glance-api.conf
+  
+- name: Copy the Glance db prep script
+  copy: src=glance_create_db.sql dest=/usr/share/glance_create_db.sql mode=0755
+
+- name: Create Glance db
+  shell: chdir=/usr/bin mysql -u root --password=passwd < /usr/share/glance_create_db.sql
+  
+- name: Create Glance db tables
+  shell: sudo /bin/sh -c "glance-manage db_sync" glance
+
+- name: Copying Neutron config
+  template: src=neutron.conf dest=/etc/neutron/neutron.conf
+  
+- name: Copy the Neutron db prep script
+  copy: src=neutron_create_db.sql dest=/usr/share/neutron_create_db.sql mode=0755
+
+- name: Create Neutron db
+  shell: chdir=/usr/bin mysql -u root --password=passwd < /usr/share/neutron_create_db.sql
+
+- name: Copying Nova config
+  template: src=nova.conf dest=/etc/nova/nova.conf
+  
+- name: Copy the Nova db prep script
+  copy: src=nova_create_db.sql dest=/usr/share/nova_create_db.sql mode=0755
+
+- name: Create Nova db
+  shell: chdir=/usr/bin mysql -u root --password=passwd < /usr/share/nova_create_db.sql
+
+- name: Create Nova db tables
+  shell: sudo /bin/sh -c "nova-manage db sync" nova

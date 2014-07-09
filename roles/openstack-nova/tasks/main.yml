@@ -1,0 +1,24 @@
+---
+
+- name: Create Compute service user
+  command: keystone user-create --name=nova --pass=passwd --email=nova@nova.com
+
+- name: Set Compute service user tenant and role 
+  command: keystone user-role-add --user=nova --tenant=service --role=admin
+ 
+- name: Create service for Compute Service
+  command: keystone service-create --name=nova --type=compute --description="OpenStack Compute"
+
+- name: Copying endpoint_create.sh file
+  template: src=endpoint_create.sh dest=/usr/share/endpoint_create.sh mode=0755
+
+- name: Create service endpoint for Compute Service
+  shell: chdir=/usr/share endpoint_create.sh
+
+- name: Enable Compute Service to be started at boot
+  service: name=openstack-nova-api enabled=yes state=started
+  service: name=openstack-nova-cert enabled=yes state=started
+  service: name=openstack-nova-consoleauth enabled=yes state=started
+  service: name=openstack-nova-scheduler enabled=yes state=started
+  service: name=openstack-nova-conductor enabled=yes state=started
+  service: name=openstack-nova-novncproxy enabled=yes state=started

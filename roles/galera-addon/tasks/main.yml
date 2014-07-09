@@ -3,4 +3,4 @@
   copy: src=s9s-galera-codership-2.8.0-rpm.tar.gz dest=/usr/share
 
 - name: Extract archive
-  command: chdir=/usr/share /bin/tar xvfz s9s-galera-codership-2.8.0-rpm.tar.gz
+  command: chdir=/usr/share /bin/tar -xzf s9s-galera-codership-2.8.0-rpm.tar.gz

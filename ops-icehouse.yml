@@ -1,0 +1,19 @@
+---
+# This playbook deploys Openstack Icehouse v2014.1 components.
+
+- hosts: ice_openstack_infra 
+  user: root
+  remote_user: root
+  sudo: yes
+  roles:
+    - openstack-keystone
+    - openstack-glance
+    - openstack-nova
+    - openstack-neutron
+
+#- hosts: ice_openstack_compute
+#  user: root
+#  remote_user: root
+#  sudo: yes
+#  roles:
+#   - ntp-standalone

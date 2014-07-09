@@ -1,19 +1,22 @@
 ---
-# This playbook deploys a simple standalone MySQL server. 
+# This playbook deploys base environment for Openstack Icehouse. 
 
-- hosts: ice_openstack 
+- hosts: ice_openstack_infra 
   user: root
   remote_user: root
   sudo: yes
   roles:
     - ntp-standalone
-    - mysql-standalone
     - openstack-packages
     - rabbitmq-standalone
+    - mysql-client
 
 - hosts: ice_openstack_compute
   user: root
   remote_user: root
   sudo: yes
   roles:
+    - ntp-standalone
+    - openstack-packages
     - mysql-python
+    - mysql-client

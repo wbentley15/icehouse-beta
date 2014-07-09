@@ -1,0 +1,31 @@
+---
+
+- name: Copying Keystone config
+  template: src=keystone.conf dest=/etc/keystone/keystone.conf
+
+- name: Create authorization token
+  command: openssl rand -hex 10 -out /usr/share/admin_tok.txt
+  
+- name: Add authorization token to config
+  shell: openstack-config --set /etc/keystone/keystone.conf DEFAULT admin_token {{ OS_SERVICE_TOKEN }}
+  
+- name: Create signing keys and certificates
+  command: keystone-manage pki_setup --keystone-user keystone --keystone-group keystone
+  
+- name: Change ownership of ssl directory
+  file: path=/etc/keystone/ssl/ owner=keystone group=keystone state=directory recurse=yes
+
+- name: Change permissions of ssl directory
+  shell: chmod -R o-rwx /etc/keystone/ssl
+  
+- name: Enable Identity Service to be started at boot
+  service: name=openstack-keystone enabled=yes state=restarted
+
+- name: Create service for Identity Service
+  command: keystone --os-token={{ OS_SERVICE_TOKEN }} --os-endpoint={{ OS_AUTH_URL }} service-create --name=keystone --type=identity --description="OpenStack Identity"
+
+- name: Copying endpoint_create.sh file
+  template: src=endpoint_create.sh dest=/usr/share/endpoint_create.sh mode=0755
+
+- name: Create service endpoint for Identity Service
+  shell: /usr/share/endpoint_create.sh
