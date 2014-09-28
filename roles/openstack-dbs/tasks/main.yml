@@ -44,3 +44,15 @@
 
 - name: Create Nova db tables
   shell: sudo /bin/sh -c "nova-manage db sync" nova
+  
+- name: Create Cinder db
+  shell: chdir=/usr/bin mysql -u root --password=passwd < /usr/share/cinder_create_db.sql
+  
+- name: Create Cinder db tables
+  shell: sudo /bin/sh -c "cinder-manage db_sync" cinder
+  
+- name: Create Heat db
+  shell: chdir=/usr/bin mysql -u root --password=passwd < /usr/share/heat_create_db.sql
+  
+- name: Create Heat db tables
+  shell: sudo /bin/sh -c "heat-manage db_sync" heat

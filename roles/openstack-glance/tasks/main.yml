@@ -1,22 +1,16 @@
 ---
 
-- name: Create Image service user
-  command: keystone user-create --name=glance --pass=passwd --email=glance@glance.com
+- name: Copying Glance api config
+  template: src=glance-api.conf dest=/etc/glance/glance-api.conf
 
-- name: Set Image service user tenant and role 
-  command: keystone user-role-add --user=glance --tenant=service --role=admin
- 
-- name: Create service for Image Service
-  command: keystone service-create --name=glance --type=image --description="OpenStack Image Service"
-
-- name: Copying endpoint_create.sh file
-  template: src=endpoint_create.sh dest=/usr/share/endpoint_create.sh mode=0755
-
-- name: Create service endpoint for Image Service
-  shell: chdir=/usr/share endpoint_create.sh
+- name: Copying Glance registry config
+  template: src=glance-registry.conf dest=/etc/glance/glance-registry.conf
   
-- name: Enable Identity Service API to be started at boot
+- name: Remove startup files
+  command: rm -rf /var/log/glance/*.log
+  
+- name: Enable Glance Service API to be started at boot
   service: name=openstack-glance-api enabled=yes state=started
   
-- name: Enable Identity Service to be started at boot
+- name: Enable Glance Service to be started at boot
   service: name=openstack-glance-registry enabled=yes state=started

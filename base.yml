@@ -20,3 +20,6 @@
     - openstack-packages
     - mysql-python
     - mysql-client
+    - openstack-nova-compute
+    - openstack-neutron-ml2
+    - openstack-neutron-linuxbridge

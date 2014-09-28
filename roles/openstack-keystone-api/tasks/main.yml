@@ -1,0 +1,7 @@
+---
+
+- name: Create service for Identity Service
+  command: keystone --os-token={{ OS_SERVICE_TOKEN }} --os-endpoint={{ OS_AUTH_URL }} service-create --name=keystone --type=identity --description="OpenStack Identity"
+
+- name: Create service for Identity Service
+  command: keystone --os-token={{ OS_SERVICE_TOKEN }} --os-endpoint={{ OS_AUTH_URL }} endpoint-create --service-id=keystone --publicurl=http://{{ LB_IP }}:5000/v2.0 --internalurl=http://{{ LB_IP }}:5000/v2.0 --adminurl=http://{{ LB_IP }}:35357/v2.0

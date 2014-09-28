@@ -1,0 +1,12 @@
+---
+- name: Copying Cinder api config
+  template: src=cinder.conf dest=/etc/cinder/cinder.conf
+
+- name: Remove startup files
+  command: rm -rf /var/log/cinder/*.log
+   
+- name: Enable Cinder Service API to be started at boot
+  service: name=openstack-cinder-api enabled=yes state=started
+  
+- name: Enable Cinder Service to be started at boot
+  service: name=openstack-cinder-scheduler enabled=yes state=started

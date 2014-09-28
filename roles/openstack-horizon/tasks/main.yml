@@ -1,0 +1,13 @@
+---
+
+- name: Copying Horizon config
+  template: src=local_settings dest=/etc/openstack-dashboard/local_settings
+
+- name: Ensure SELinux allows HTTP traffic
+  command: setsebool -P httpd_can_network_connect on
+  
+- name: Enable httpd to be started at boot
+  service: name=httpd enabled=yes state=started
+  
+- name: Enable memcache to be started at boot
+  service: name=memcached enabled=yes state=started

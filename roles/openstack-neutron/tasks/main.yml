@@ -3,23 +3,11 @@
   copy: src=sysctl.conf dest=/etc/sysctl.conf
 
 - name: Implement kernel networking changes
-  shell: sysctl -p
+  shell: sysctl -q -e -p
+
+- name: Copying Neutron config
+  template: src=neutron.conf dest=/etc/neutron/neutron.conf
   
-- name: Create Networking service user
-  command: keystone user-create --name=neutron --pass=passwd --email=neutron@neutron.com
-
-- name: Set Networking service user tenant and role 
-  command: keystone user-role-add --user=neutron --tenant=service --role=admin
- 
-- name: Create service for Networking Service
-  command: keystone service-create --name=neutron --type=network --description="OpenStack Networking"
-
-- name: Copying endpoint_create.sh file
-  template: src=endpoint_create.sh dest=/usr/share/endpoint_create.sh mode=0755
-
-- name: Create service endpoint for Networking Service
-  shell: chdir=/usr/share endpoint_create.sh
-
 - name: Set Networking Service tenant id
   command: openstack-config --set /etc/neutron/neutron.conf DEFAULT nova_admin_tenant_id $(keystone tenant-list | awk '/ service / { print $2 }')
 
@@ -37,10 +25,21 @@
 
 - name: Create symbolic link from ML2 to Neutron plugins
   shell: ln -s plugins/ml2/ml2_conf.ini /etc/neutron/plugin.ini
+
+- name: Remove startup files
+  command: rm -rf /var/log/neutron/*.log
   
-- name: Enable Networking Service to be started at boot
+- name: Enable Networking Server Service to be started at boot
   service: name=neutron-server enabled=yes state=started
+  
+- name: Enable Networking Service Linuxbridge Agent to be started at boot
   service: name=neutron-linuxbridge-agent enabled=yes state=started
+  
+- name: Enable Networking Service L3 Agent to be started at boot
   service: name=neutron-l3-agent enabled=yes state=started
+  
+- name: Enable Networking Service DHCP Agent to be started at boot
   service: name=neutron-dhcp-agent enabled=yes state=started
+  
+- name: Enable Networking Service Metadata Agent to be started at boot
   service: name=neutron-metadata-agent enabled=yes state=started

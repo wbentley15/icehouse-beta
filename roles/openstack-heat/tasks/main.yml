@@ -1,0 +1,15 @@
+---
+- name: Copying Heat api config
+  template: src=heat.conf dest=/etc/heat/heat.conf
+
+- name: Remove startup files
+  command: rm -rf /var/log/heat/*.log
+   
+- name: Enable Heat Service API to be started at boot
+  service: name=openstack-heat-api enabled=yes state=started
+  
+- name: Enable Heat Service API CFN to be started at boot
+  service: name=openstack-heat-api-cfn enabled=yes state=started
+  
+- name: Enable Heat Service Engine to be started at boot
+  service: name=openstack-heat-engine enabled=yes state=started

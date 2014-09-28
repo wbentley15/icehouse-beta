@@ -7,13 +7,33 @@
   sudo: yes
   roles:
     - openstack-keystone
+
+- hosts: ice_openstack_primary 
+  user: root
+  remote_user: root
+  sudo: yes
+  roles:
+    - openstack-keystone-api
+    - openstack-users
+    - openstack-service-create
+    
+- hosts: ice_openstack_infra 
+  user: root
+  remote_user: root
+  sudo: yes
+  roles:
     - openstack-glance
     - openstack-nova
     - openstack-neutron
-
-#- hosts: ice_openstack_compute
-#  user: root
-#  remote_user: root
-#  sudo: yes
-#  roles:
-#   - ntp-standalone
+    - openstack-horizon
+    - openstack-cinder
+    - openstack-heat
+    
+- hosts: ice_openstack_compute
+  user: root
+  remote_user: root
+  sudo: yes
+  roles:
+    - openstack-nova-compute
+    - openstack-neutron-ml2
+    - openstack-neutron-linuxbridge

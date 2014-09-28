@@ -1,0 +1,43 @@
+---
+
+- name: Create service for Image Service
+  command: keystone --os-token={{ OS_SERVICE_TOKEN }} --os-endpoint={{ OS_AUTH_URL }} service-create --name=glance --type=image --description="OpenStack Image Service"
+
+- name: Create endpoint for Image Service
+  command: keystone --os-token={{ OS_SERVICE_TOKEN }} --os-endpoint={{ OS_AUTH_URL }} endpoint-create --service-id=glance --publicurl=http://{{ LB_IP }}:9292 --internalurl=http://{{ LB_IP }}:9292 --adminurl=http://{{ LB_IP }}:9292
+
+- name: Create service for Compute Service
+  command: keystone --os-token={{ OS_SERVICE_TOKEN }} --os-endpoint={{ OS_AUTH_URL }} service-create --name=nova --type=compute --description="OpenStack Compute"
+
+- name: Create endpoint endpoint for Compute Service
+  command: keystone --os-token={{ OS_SERVICE_TOKEN }} --os-endpoint={{ OS_AUTH_URL }} endpoint-create --service-id=nova --publicurl=http://{{ LB_IP }}:8774/v2/%\(tenant_id\)s --internalurl=http://{{ LB_IP }}:8774/v2/%\(tenant_id\)s --adminurl=http://{{ LB_IP }}:8774/v2/%\(tenant_id\)s
+
+- name: Create service for Networking Service
+  command: keystone --os-token={{ OS_SERVICE_TOKEN }} --os-endpoint={{ OS_AUTH_URL }} service-create --name=neutron --type=network --description="OpenStack Networking"
+
+- name: Create endpoint for Networking Service
+  command: keystone --os-token={{ OS_SERVICE_TOKEN }} --os-endpoint={{ OS_AUTH_URL }} endpoint-create --service-id=neutron --publicurl=http://{{ LB_IP }}:9696 --internalurl=http://{{ LB_IP }}:9696 --adminurl=http://{{ LB_IP }}:9696
+
+- name: Create service for Block Storage Service
+  command: keystone --os-token={{ OS_SERVICE_TOKEN }} --os-endpoint={{ OS_AUTH_URL }} service-create --name=cinder --type=volume --description="OpenStack Block Storage"
+
+- name: Create endpoint for Block Storage Service
+  command: keystone --os-token={{ OS_SERVICE_TOKEN }} --os-endpoint={{ OS_AUTH_URL }} endpoint-create --service-id=cinder --publicurl=http://{{ LB_IP }}:8776/v1/%\(tenant_id\)s --internalurl=http://{{ LB_IP }}:8776/v1/%\(tenant_id\)s --adminurl=http://{{ LB_IP }}:8776/v1/%\(tenant_id\)s
+
+- name: Create service for Block Storage V2 Service
+  command: keystone --os-token={{ OS_SERVICE_TOKEN }} --os-endpoint={{ OS_AUTH_URL }} service-create --name=cinderv2 --type=volumev2 --description="OpenStack Block Storage v2"
+
+- name: Create endpoint for Block Storage V2 Service
+  command: keystone --os-token={{ OS_SERVICE_TOKEN }} --os-endpoint={{ OS_AUTH_URL }} endpoint-create --service-id=cinderv2 --publicurl=http://{{ LB_IP }}:8776/v2/%\(tenant_id\)s --internalurl=http://{{ LB_IP }}:8776/v2/%\(tenant_id\)s --adminurl=http://{{ LB_IP }}:8776/v2/%\(tenant_id\)s
+
+- name: Create service for Orchestration Service
+  command: keystone --os-token={{ OS_SERVICE_TOKEN }} --os-endpoint={{ OS_AUTH_URL }} service-create --name=heat --type=orchestration --description="Orchestration"
+
+- name: Create endpoint for Orchestration Service
+  command: keystone --os-token={{ OS_SERVICE_TOKEN }} --os-endpoint={{ OS_AUTH_URL }} endpoint-create --service-id=heat --publicurl=http://{{ LB_IP }}:8004/v1/%\(tenant_id\)s --internalurl=http://{{ LB_IP }}:8004/v1/%\(tenant_id\)s --adminurl=http://{{ LB_IP }}:8004/v1/%\(tenant_id\)s
+
+- name: Create service for Orchestration CloudFormation Service
+  command: keystone --os-token={{ OS_SERVICE_TOKEN }} --os-endpoint={{ OS_AUTH_URL }} service-create --name=heat-cfn --type=cloudformation --description="Orchestration CloudFormation"
+
+- name: Create endpoint for Orchestration CloudFormation Service
+  command: keystone --os-token={{ OS_SERVICE_TOKEN }} --os-endpoint={{ OS_AUTH_URL }} endpoint-create --service-id=heat-cfn --publicurl=http://{{ LB_IP }}:8000/v1 --internalurl=http://{{ LB_IP }}:8000/v1 --adminurl=http://{{ LB_IP }}:8000/v1

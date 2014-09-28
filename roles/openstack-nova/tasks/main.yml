@@ -1,24 +1,24 @@
 ---
+- name: Copying Nova config
+  template: src=nova.conf dest=/etc/nova/nova.conf
 
-- name: Create Compute service user
-  command: keystone user-create --name=nova --pass=passwd --email=nova@nova.com
+- name: Remove startup files
+  command: rm -rf /var/log/nova/*.log
 
-- name: Set Compute service user tenant and role 
-  command: keystone user-role-add --user=nova --tenant=service --role=admin
- 
-- name: Create service for Compute Service
-  command: keystone service-create --name=nova --type=compute --description="OpenStack Compute"
-
-- name: Copying endpoint_create.sh file
-  template: src=endpoint_create.sh dest=/usr/share/endpoint_create.sh mode=0755
-
-- name: Create service endpoint for Compute Service
-  shell: chdir=/usr/share endpoint_create.sh
-
-- name: Enable Compute Service to be started at boot
+- name: Enable Compute Service API to be started at boot
   service: name=openstack-nova-api enabled=yes state=started
+  
+- name: Enable Compute Service CERT to be started at boot
   service: name=openstack-nova-cert enabled=yes state=started
+  
+- name: Enable Compute Service Console to be started at boot
   service: name=openstack-nova-consoleauth enabled=yes state=started
+  
+- name: Enable Compute Service Scheduler to be started at boot
   service: name=openstack-nova-scheduler enabled=yes state=started
+
+- name: Enable Compute Service Conductor to be started at boot
   service: name=openstack-nova-conductor enabled=yes state=started
+  
+- name: Enable Compute Service NoVNCProxy to be started at boot
   service: name=openstack-nova-novncproxy enabled=yes state=started

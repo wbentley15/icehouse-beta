@@ -8,4 +8,4 @@
     - ntp-standalone
     - mysql-standalone
     - galera-addon
-#    - haproxy-standalone
+    - haproxy-standalone

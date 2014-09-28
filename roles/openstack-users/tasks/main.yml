@@ -1,0 +1,52 @@
+---
+
+- name: Create administrative user
+  command: keystone --os-token={{ OS_SERVICE_TOKEN }} --os-endpoint={{ OS_AUTH_URL }} user-create --name=admin --pass=passwd --email=admin@admin.com
+
+- name: Create admin role 
+  command: keystone --os-token={{ OS_SERVICE_TOKEN }} --os-endpoint={{ OS_AUTH_URL }} role-create --name=admin
+  
+- name: Create admin tenant
+  command: keystone --os-token={{ OS_SERVICE_TOKEN }} --os-endpoint={{ OS_AUTH_URL }} tenant-create --name=admin --description="Admin Tenant"
+
+- name: Create service tenant
+  command: keystone --os-token={{ OS_SERVICE_TOKEN }} --os-endpoint={{ OS_AUTH_URL }} tenant-create --name=service --description="Service Tenant"
+  
+- name: Assign administrative user to admin role
+  command: keystone --os-token={{ OS_SERVICE_TOKEN }} --os-endpoint={{ OS_AUTH_URL }} user-role-add --user=admin --tenant=admin --role=admin
+
+- name: Assign administrative user to member role
+  command: keystone --os-token={{ OS_SERVICE_TOKEN }} --os-endpoint={{ OS_AUTH_URL }} user-role-add --user=admin --role=_member_ --tenant=admin
+
+- name: Create Image service user
+  command: keystone --os-token={{ OS_SERVICE_TOKEN }} --os-endpoint={{ OS_AUTH_URL }} user-create --name=glance --pass=passwd --email=glance@glance.com
+
+- name: Set Image service user tenant and role 
+  command: keystone --os-token={{ OS_SERVICE_TOKEN }} --os-endpoint={{ OS_AUTH_URL }} user-role-add --user=glance --tenant=service --role=admin
+
+- name: Create Compute service user
+  command: keystone --os-token={{ OS_SERVICE_TOKEN }} --os-endpoint={{ OS_AUTH_URL }} user-create --name=nova --pass=passwd --email=nova@nova.com
+
+- name: Set Compute service user tenant and role 
+  command: keystone --os-token={{ OS_SERVICE_TOKEN }} --os-endpoint={{ OS_AUTH_URL }} user-role-add --user=nova --tenant=service --role=admin
+
+- name: Create Networking service user
+  command: keystone --os-token={{ OS_SERVICE_TOKEN }} --os-endpoint={{ OS_AUTH_URL }} user-create --name=neutron --pass=passwd --email=neutron@neutron.com
+
+- name: Set Networking service user tenant and role 
+  command: keystone --os-token={{ OS_SERVICE_TOKEN }} --os-endpoint={{ OS_AUTH_URL }} user-role-add --user=neutron --tenant=service --role=admin
+  
+- name: Create Block Storage service user
+  command: keystone --os-token={{ OS_SERVICE_TOKEN }} --os-endpoint={{ OS_AUTH_URL }} user-create --name=cinder --pass=passwd --email=cinder@cinder.com
+
+- name: Set Block Storage service user tenant and role 
+  command: keystone --os-token={{ OS_SERVICE_TOKEN }} --os-endpoint={{ OS_AUTH_URL }} user-role-add --user=cinder --tenant=service --role=admin
+
+- name: Create Orchestration service user
+  command: keystone --os-token={{ OS_SERVICE_TOKEN }} --os-endpoint={{ OS_AUTH_URL }} user-create --name=heat --pass=passwd --email=heat@heat.com
+
+- name: Set Orchestration service user tenant and role 
+  command: keystone --os-token={{ OS_SERVICE_TOKEN }} --os-endpoint={{ OS_AUTH_URL }} user-role-add --user=heat --tenant=service --role=admin
+
+- name: Create Heat stack user role 
+  command: keystone --os-token={{ OS_SERVICE_TOKEN }} --os-endpoint={{ OS_AUTH_URL }} role-create --name heat_stack_user

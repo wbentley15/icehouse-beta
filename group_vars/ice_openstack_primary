@@ -1,8 +1,8 @@
-# Here are variables related to the install
+# Global variables for Primary infrastructure node
 
 OS_USERNAME: admin
 OS_PASSWORD: passwd
 OS_TENANT_NAME: admin
 OS_AUTH_URL: http://{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:35357/v2.0
 OS_SERVICE_TOKEN: 5c28254dc9f815cfaefd
-
+LB_IP: 192.168.236.65

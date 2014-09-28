@@ -18,3 +18,11 @@
    - openstack-nova-novncproxy
    - openstack-nova-scheduler
    - python-novaclient
+   - memcached
+   - python-memcached
+   - mod_wsgi
+   - openstack-dashboard
+   - openstack-cinder
+   - openstack-heat-api
+   - openstack-heat-engine
+   - openstack-heat-api-cfn

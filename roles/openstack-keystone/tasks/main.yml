@@ -18,14 +18,14 @@
 - name: Change permissions of ssl directory
   shell: chmod -R o-rwx /etc/keystone/ssl
   
+- name: Change permissions of ssl directory
+  shell: chmod -R 766 /var/log/glance /var/log/keystone /var/log/neutron /var/log/nova
+  
+- name: Remove startup files
+  command: rm -rf /var/log/keynote/*.log
+
 - name: Enable Identity Service to be started at boot
-  service: name=openstack-keystone enabled=yes state=restarted
-
-- name: Create service for Identity Service
-  command: keystone --os-token={{ OS_SERVICE_TOKEN }} --os-endpoint={{ OS_AUTH_URL }} service-create --name=keystone --type=identity --description="OpenStack Identity"
-
-- name: Copying endpoint_create.sh file
-  template: src=endpoint_create.sh dest=/usr/share/endpoint_create.sh mode=0755
-
-- name: Create service endpoint for Identity Service
-  shell: /usr/share/endpoint_create.sh
+  service: name=openstack-keystone enabled=yes state=started
+  
+- name: Copying environment admin source file
+  template: src=admin-openrc.sh dest=/home/vagrant/admin-openrc.sh
